@@ -3,6 +3,8 @@ from .models import Advertiser
 
 # Create your views here.
 def home(request):
+
+
     context = {
         'advertisers' : Advertiser.objects.all()
     }

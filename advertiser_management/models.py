@@ -14,8 +14,25 @@ class Advertiser(BaseAdvertising):
     def __str__(self):
         return self.name
 
+    def inc_views(self):
+        self.views += 1
+        self.save()
+
+    def inc_clicks(self):
+        self.clicks += 1
+        self.save()
 
 class Ad(BaseAdvertising):
     title = models.CharField(max_length=100)
     image = models.ImageField(default='default.jpg', upload_to='profile_pics')
     advertiser = models.ForeignKey(Advertiser, on_delete=models.CASCADE)
+
+    def inc_views(self):
+        self.views += 1
+        self.advertiser.inc_clicks()
+        self.save()
+
+    def inc_clicks(self):
+        self.clicks += 1
+        self.advertiser.inc_views()
+        self.save()
