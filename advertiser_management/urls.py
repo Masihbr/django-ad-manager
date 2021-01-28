@@ -4,6 +4,6 @@ from .views import Clicker
 
 urlpatterns = [
     path('', views.home, name='ads'),
-    path('click/<int:ad_id>', Clicker.as_view(), name='clicker'),
-    path('ad/<int:ad_id>', views.ad, name='ad')
+    path('click/<int:pk>/', Clicker.as_view(), name='clicker'),
+    path('ad/<int:pk>/', views.ad, name='ad')
 ]
