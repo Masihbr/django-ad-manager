@@ -27,7 +27,7 @@ class Ad(BaseAdvertising):
     image = models.ImageField(default='default.jpg', upload_to='profile_pics')
     advertiser = models.ForeignKey(Advertiser, on_delete=models.CASCADE)
     url = models.URLField()
-    
+
     def inc_views(self):
         self.views += 1
         self.advertiser.inc_clicks()
