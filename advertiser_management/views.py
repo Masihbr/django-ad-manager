@@ -1,5 +1,7 @@
 from django.shortcuts import render
-from .models import Advertiser
+from .models import Advertiser,Ad
+from django.shortcuts import get_object_or_404
+from django.views.generic.base import RedirectView
 
 
 # Create your views here.
@@ -12,5 +14,14 @@ def home(request):
     }
     return render(request, 'advertiser_management/ads.html', context)
 
-def click(request):
-    return render(request, 'advertiser_management/ad.html', context)
+class Clicker(RedirectView):
+    permanent = False
+    query_string = True
+    pattern_name = 'ad'
+    def get_redirect_url(self, *args, **kwargs):
+        ad = get_object_or_404(Ad, pk=kwargs['pk'])
+        ad.inc_clicks()
+        return super().get_redirect_url(*args, **kwargs)
+
+def ad(request):
+    return render(request, 'advertiser_management/ad.html')
