@@ -17,11 +17,16 @@ def home(request):
 
 class Clicker(RedirectView):
     pattern_name = 'ad'
+
     def get_redirect_url(self, *args, **kwargs):
         ad = get_object_or_404(Ad, pk=kwargs['pk'])
         ad.inc_clicks()
         return super().get_redirect_url(*args, **kwargs)
 
 
-def ad(request):
-    return render(request, 'advertiser_management/ad.html')
+def ad(request, pk):
+    ad = get_object_or_404(Ad, pk=pk)
+    context = {
+        'ad': ad
+    }
+    return render(request, 'advertiser_management/ad.html', context)
