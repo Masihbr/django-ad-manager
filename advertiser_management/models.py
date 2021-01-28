@@ -38,4 +38,3 @@ class Ad(BaseAdvertising):
         self.advertiser.inc_views()
         self.save()
 
-        
