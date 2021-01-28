@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views.generic import CreateView
 
-from .forms import AdForm
+from .forms import AdForm, create_ad_form
 from .models import Advertiser, Ad
 from django.shortcuts import get_object_or_404
 from django.views.generic.base import RedirectView
@@ -46,3 +46,4 @@ def ad(request, pk):
 class CreateAd(CreateView):
     model = Ad
     form_class = create_ad_form
+    template_name = 'advertiser_management/ad_form.html'

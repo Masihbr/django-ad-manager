@@ -12,4 +12,10 @@ from advertiser_management.models import Ad
 class create_ad_form(forms.ModelForm):
     class Meta:
         model = Ad
-        fields = ('advertiser','title','image')
+        fields = ('advertiser','title','image','url')
+        widgets = {
+            'advertiser': forms.Select(attrs={'class': 'form-control'}),
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'image': forms.FileInput(attrs={'class': 'form-control'}),
+            'url':  forms.URLInput(attrs={'class': 'form-control'}),
+        }
