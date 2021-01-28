@@ -6,12 +6,12 @@
 </head>
 <body>
     <div class="content-section">
-        <form method="POST">
+        <form method="POST" sr>
             {% csrf_token %}
             <fieldset class="form-group">
                 <legend class="border-bottom mb-4">add an ad!</legend>
                 <table>
-                {{ form.as_table }}
+                {{ form.as_p }}
                 </table>
             </fieldset>
             <div class="form-group">
