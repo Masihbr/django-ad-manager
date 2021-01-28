@@ -1,4 +1,6 @@
 from django.shortcuts import render, redirect
+from django.views.generic import CreateView
+
 from .forms import AdForm
 from .models import Advertiser, Ad
 from django.shortcuts import get_object_or_404
@@ -32,11 +34,15 @@ def ad(request, pk):
     }
     return render(request, 'advertiser_management/ad.html', context)
 
-def create_ad(request):
-    if request.method == 'POST':
-        form = AdForm(request.POST)
-        if form.is_valid():
-            return redirect('ads')
-    else:
-        form = AdForm()
-    return render(request, 'advertiser_management/ad_form.html', {'form': form})
+# def create_ad(request):
+#     if request.method == 'POST':
+#         form = AdForm(request.POST)
+#         if form.is_valid():
+#             return redirect('ads')
+#     else:
+#         form = AdForm()
+#     return render(request, 'advertiser_management/ad_form.html', {'form': form})
+
+class CreateAd(CreateView):
+    model = Ad
+    form_class = create_ad_form
