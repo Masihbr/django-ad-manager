@@ -4,6 +4,9 @@ from .models import Advertiser
 
 # Create your views here.
 def home(request):
+    for advertiser in Advertiser.objects.all():
+        for ad in advertiser.ad_set:
+            ad.inc_views()
     context = {
         'advertisers': Advertiser.objects.all()
     }
