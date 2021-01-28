@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from .forms import AdForm
 from .models import Advertiser, Ad
 from django.shortcuts import get_object_or_404
 from django.views.generic.base import RedirectView
