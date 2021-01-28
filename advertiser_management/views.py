@@ -39,4 +39,4 @@ def create_ad(request):
             return redirect('')
     else:
         form = AdForm()
-    return render(request, 'ad_form.html', {'form': form})
+    return render(request, 'advertiser_management/ad_form.html', {'form': form})
