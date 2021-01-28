@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Advertiser, Ad
 from django.shortcuts import get_object_or_404
 from django.views.generic.base import RedirectView
@@ -30,3 +30,12 @@ def ad(request, pk):
         'ad': ad
     }
     return render(request, 'advertiser_management/ad.html', context)
+
+def create_ad(request):
+    if request.method == 'POST':
+        form = AdForm(request.POST)
+        if form.is_valid():
+            return redirect('')
+    else:
+        form = AdForm()
+    return render(request, 'ad_form.html', {'form': form})
