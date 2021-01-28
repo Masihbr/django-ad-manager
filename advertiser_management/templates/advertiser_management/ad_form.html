@@ -5,17 +5,21 @@
     <title>Title</title>
 </head>
 <body>
-<div class="content-section">
-    <form method="POST">
-        {% csrf_token %}
-        <fieldset class="form-group">
-            <legend class="border-bottom mb-4">add an ad!</legend>
-            {{ form }}
-        </fieldset>
-        <div class="form-group">
-            <button class="btn btn-outline-info" type="submit">submit</button>
-        </div>
-    </form>
-</div>
+    <div class="content-section">
+        <form method="POST">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">add an ad!</legend>
+                <table>
+                {{ form.as_table }}
+                </table>
+            </fieldset>
+            <div class="form-group">
+                <button class="btn btn-outline-info" type="submit">submit</button>
+            </div>
+        </form>
+    </div>
 </body>
 </html>
+
+

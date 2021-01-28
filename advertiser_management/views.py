@@ -36,7 +36,7 @@ def create_ad(request):
     if request.method == 'POST':
         form = AdForm(request.POST)
         if form.is_valid():
-            return redirect('')
+            return redirect('ads')
     else:
         form = AdForm()
     return render(request, 'advertiser_management/ad_form.html', {'form': form})
