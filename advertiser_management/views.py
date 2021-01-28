@@ -11,3 +11,6 @@ def home(request):
         'advertisers': Advertiser.objects.all()
     }
     return render(request, 'advertiser_management/ads.html', context)
+
+def click(request):
+    return render(request, 'advertiser_management/ad.html', context)
