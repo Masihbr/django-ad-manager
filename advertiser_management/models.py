@@ -63,7 +63,7 @@ class BaseData(models.Model):
 
 class Click(BaseData):
     def __str__(self):
-        return "A click!"
+        return ("view_%d:ad_%d" % (self.pk, self.ad.pk))
 
 
 class View(BaseData):
