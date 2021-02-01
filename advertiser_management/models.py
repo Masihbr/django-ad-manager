@@ -34,6 +34,7 @@ class Ad(BaseAdvertising):
     image = models.ImageField(default='default.jpg', upload_to='profile_pics')
     advertiser = models.ForeignKey(Advertiser, on_delete=models.CASCADE)
     url = models.URLField(default='')
+    approve = models.BooleanField(default=False)
 
     def __str__(self):
         return ("ad_%d" % self.pk)
