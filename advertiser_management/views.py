@@ -44,7 +44,18 @@ class CreateAdPage(CreateView):
 class ReportPageView(TemplateView):
     template_name = "advertiser_management/report.html"
 
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['ads_list'] = Ad.objects.all()[:5]
+        hour_list = {}
+        for ad in Ad.objects.all():
+            for i in range(0, 24):
+                sum = len(Click.objects.filter(ad=ad).filter(time__hour=i))
+                sum += len(View.objects.filter(ad=ad).filter(time__hour=i))
+                print(sum)
+                hour_list[i] = {ad,sum}
+        context = {
+            'hour_list': hour_list,
+            'ads_list': Ad.objects.all()
+        }
         return context
