@@ -1,5 +1,10 @@
-from advertiser_management.models import Advertiser,Ad,Click, View
+import re
+
+from django.shortcuts import get_object_or_404
+
+from advertiser_management.models import Advertiser, Ad, Click, View
 from django.urls import resolve
+
 
 class IPMiddleware:
     def __init__(self, get_response):
@@ -24,6 +29,12 @@ class IPMiddleware:
                     ad.inc_views()
                     view = View(ad=ad, ip=self.get_client_ip(request))
                     view.save()
+        if url_name == 'clicker':
+            match = re.match('/click/(\d+)/', request.path)
+            ad_id = match.group(1)
+            ad = get_object_or_404(Ad, pk=ad_id)
+            click = Click(ad=ad, ip=self.get_client_ip(request))
+            click.save()
 
     def get_client_ip(self, request):
         try:
