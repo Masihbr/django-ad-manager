@@ -25,24 +25,17 @@ class Clicker(RedirectView):
         return super().get_redirect_url(*args, **kwargs)
 
 
-def ad(request, pk):
-    ad = get_object_or_404(Ad, pk=pk)
-    context = {
-        'ad': ad
-    }
-    return render(request, 'advertiser_management/ad.html', context)
+class AdPageView(TemplateView):
+    template_name = 'advertiser_management/ad.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        ad = get_object_or_404(Ad, pk=kwargs['pk'])
+        context['ad'] = ad
+        return context
 
 
-# def create_ad(request):
-#     if request.method == 'POST':
-#         form = AdForm(request.POST)
-#         if form.is_valid():
-#             return redirect('ads')
-#     else:
-#         form = AdForm()
-#     return render(request, 'advertiser_management/ad_form.html', {'form': form})
-
-class CreateAd(CreateView):
+class CreateAdPage(CreateView):
     model = Ad
     form_class = create_ad_form
     template_name = 'advertiser_management/ad_form.html'
