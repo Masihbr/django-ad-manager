@@ -12,6 +12,8 @@ def home(request):
     for advertiser in Advertiser.objects.all():
         for ad in advertiser.ad_set.all():
             ad.inc_views()
+            view = View(ad=ad, ip=request.META.get('REMOTE_ADDR'))
+            view.save()
     context = {
         'advertisers': Advertiser.objects.all()
     }
@@ -33,6 +35,7 @@ def ad(request, pk):
         'ad': ad
     }
     return render(request, 'advertiser_management/ad.html', context)
+
 
 # def create_ad(request):
 #     if request.method == 'POST':
