@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils import timezone
 from django.urls import reverse
+
+
 # Create your models here.
 
 
@@ -10,6 +12,7 @@ class BaseAdvertising(models.Model):
 
     class Meta:
         abstract = True
+
 
 class Advertiser(BaseAdvertising):
     name = models.CharField(max_length=150)
@@ -24,6 +27,7 @@ class Advertiser(BaseAdvertising):
     def inc_clicks(self):
         self.clicks += 1
         self.save()
+
 
 class Ad(BaseAdvertising):
     title = models.CharField(max_length=100)
@@ -44,16 +48,20 @@ class Ad(BaseAdvertising):
     def get_absolute_url(self):
         return reverse('ads')
 
+
 class BaseData():
-    ad = models.ForeignKey(Ad,on_delete=models.CASCADE)
+    ad = models.ForeignKey(Ad, on_delete=models.CASCADE)
     time = models.DateTimeField(default=timezone.now)
     ip = models.IPAddressField()
+
     class Meta:
         abstract = True
+
 
 class Click(BaseData):
     def __str__(self):
         return "A click!"
+
 
 class View(BaseData):
     def __str__(self):

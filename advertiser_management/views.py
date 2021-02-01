@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.views.generic import CreateView
 
 from .forms import create_ad_form
-from .models import Advertiser, Ad
+from .models import Advertiser, Ad, Click, View
 from django.shortcuts import get_object_or_404
 from django.views.generic.base import RedirectView
 
@@ -12,6 +12,7 @@ def home(request):
     for advertiser in Advertiser.objects.all():
         for ad in advertiser.ad_set.all():
             ad.inc_views()
+            # Click.objects.create()
     context = {
         'advertisers': Advertiser.objects.all()
     }
