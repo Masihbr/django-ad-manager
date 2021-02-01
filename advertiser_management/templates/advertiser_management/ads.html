@@ -1,3 +1,5 @@
+{% extends "advertiser_management/base.html" %}
+{% block content %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,7 +7,6 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           crossorigin="anonymous">
     <title>Ad View</title>
-    <a class="navbar-brand mr-4" href="{% url 'create_ad' %}">create ad</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle"
             aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -37,3 +38,4 @@
 </div>
 </body>
 </html>
+{% endblock content %}
