@@ -12,7 +12,6 @@ def home(request):
     for advertiser in Advertiser.objects.all():
         for ad in advertiser.ad_set.all():
             ad.inc_views()
-            # Click.objects.create()
     context = {
         'advertisers': Advertiser.objects.all()
     }
