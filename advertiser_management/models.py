@@ -35,6 +35,9 @@ class Ad(BaseAdvertising):
     advertiser = models.ForeignKey(Advertiser, on_delete=models.CASCADE)
     url = models.URLField(default='')
 
+    def __str__(self):
+        return ("ad_%d" % self.pk)
+
     def inc_views(self):
         self.views += 1
         self.advertiser.inc_clicks()
@@ -65,4 +68,4 @@ class Click(BaseData):
 
 class View(BaseData):
     def __str__(self):
-        return "A view!"
+        return ("view_%d:ad_%d" % (self.pk, self.ad.pk))
