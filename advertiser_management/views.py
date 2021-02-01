@@ -42,7 +42,7 @@ class CreateAdPage(CreateView):
 
 
 class ReportPageView(TemplateView):
-    template_name = "report.html"
+    template_name = "advertiser_management/report.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
