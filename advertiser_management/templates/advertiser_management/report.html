@@ -7,12 +7,11 @@
     <title>Report</title>
 </head>
 <body>
-
 {% for ad in ads_list %}
-
-    {% ad.title %}<br/>
-    {% ad.advertiser.name %}<br/>
-
+<div class="card mt-3 p-3">
+    {{ ad.title }}<br/>
+    {{ ad.advertiser.name }}<br/>
+</div>
 {% endfor %}
 
 </body>
