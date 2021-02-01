@@ -39,3 +39,12 @@ class CreateAdPage(CreateView):
     model = Ad
     form_class = create_ad_form
     template_name = 'advertiser_management/ad_form.html'
+
+
+class ReportPageView(TemplateView):
+    template_name = "report.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['ads_list'] = Ad.objects.all()[:5]
+        return context

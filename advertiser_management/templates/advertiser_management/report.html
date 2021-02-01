@@ -1,0 +1,20 @@
+{% extends "advertiser_management/base.html" %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Report</title>
+</head>
+<body>
+
+{% for ad in ads_list %}
+
+    {% ad.title %}<br/>
+    {% ad.advertiser.name %}<br/>
+
+{% endfor %}
+
+</body>
+</html>
+{% endblock content %}
