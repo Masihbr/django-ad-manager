@@ -9,26 +9,11 @@ from django.views.generic.base import RedirectView
 
 # Create your views here.
 def home(request):
-    for advertiser in Advertiser.objects.all():
-        for ad in advertiser.ad_set.all():
-            ad.inc_views()
-            view = View(ad=ad, ip=get_client_ip(request))
-            view.save()
     context = {
         'advertisers': Advertiser.objects.all()
     }
     return render(request, 'advertiser_management/ads.html', context)
 
-def get_client_ip(request):
-    try:
-        x_forward = request.META.get('HTTP_X_FORWARD_FOR')
-        if x_forward:
-            ip = x_forward.split(',')[0]
-        else:
-            ip = request.META.get('REMOTE_ADDR')
-    except:
-        ip = ''
-    return ip
 
 class Clicker(RedirectView):
     pattern_name = 'ad'
