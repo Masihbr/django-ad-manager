@@ -13,7 +13,7 @@ ul {
 }
 
 .bg-steel {
-  background-color: #5f788a;
+  background-color: #79b8ba;
 }
 
 .site-header .navbar-nav .nav-link {
@@ -88,4 +88,8 @@ a.article-title:hover {
   padding-right: 10px;
   padding-bottom: 10px;
   padding-left: 10px;
+}
+
+.div-padding {
+  padding-top: 80px;
 }
