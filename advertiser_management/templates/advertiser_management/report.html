@@ -15,7 +15,11 @@
 {% endfor %}
 <div class="card mt-3 p-3">
     <h5 class="card-title">sum of clicks and views in form hour:number</h5>
-    {{ big_list }}<br/>
+    <ul>
+        {% for k, v in big_list.items %}
+        <li>{{ k }}: {{ v }}</li>
+        {% endfor %}
+    </ul>
 </div>
 
 </body>

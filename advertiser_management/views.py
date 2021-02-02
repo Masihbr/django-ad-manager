@@ -52,15 +52,24 @@ class ReportPageView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        big_list = self.clicks_views_sum_per_hour_each_ad()
+
+        context = {
+            'big_list': big_list,
+            'ads_list': Ad.objects.all()
+        }
+        return context
+
+    def clicks_views_sum_per_hour_each_ad(self):
         big_list = {}
         for ad in Ad.objects.all():
             list = {}
             clicks_per_hour = Click.objects.annotate(
-                time_stamp=TruncHour('time', output_field=DateTimeField()), ).annotate(
-                hour=ExtractHour('time_stamp')).values('hour').filter(ad=ad).annotate(clicks=Count('id'))
+                hour=TruncHour('time', output_field=DateTimeField()), ).values('hour').filter(ad=ad).annotate(
+                clicks=Count('id'))
             views_per_hour = View.objects.annotate(
-                time_stamp=TruncHour('time', output_field=DateTimeField()), ).annotate(
-                hour=ExtractHour('time_stamp')).values('hour').filter(ad=ad).annotate(views=Count('id'))
+                hour=TruncHour('time', output_field=DateTimeField()), ).values('hour').filter(ad=ad).annotate(
+                views=Count('id'))
             for c in clicks_per_hour:
                 list[c['hour']] = c['clicks']
             for v in views_per_hour:
@@ -68,10 +77,5 @@ class ReportPageView(TemplateView):
                     list[v['hour']] += v['views']
                 else:
                     list[v['hour']] = v['views']
-            big_list[ad]=sorted(list.items(), key=lambda t: t[0])
-
-        context = {
-            'big_list': big_list,
-            'ads_list': Ad.objects.all()
-        }
-        return context
+            big_list[ad] = sorted(list.items(), key=lambda t: t[0])
+        return big_list
