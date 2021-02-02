@@ -66,12 +66,8 @@ class ReportPageView(TemplateView):
         clicks_per_views_list = {}
         for ad in Ad.objects.all():
             list = {}
-            clicks_per_hour = Click.objects.annotate(
-                hour=TruncHour('time', output_field=DateTimeField()), ).values('hour').filter(ad=ad).annotate(
-                clicks=Count('id'))
-            views_per_hour = View.objects.annotate(
-                hour=TruncHour('time', output_field=DateTimeField()), ).values('hour').filter(ad=ad).annotate(
-                views=Count('id'))
+            clicks_per_hour = self.get_clicks_per_hour(ad)
+            views_per_hour = self.views_per_hour(ad)
             for v in views_per_hour:
                 list[v['hour']] = v['views']
             for c in clicks_per_hour:
@@ -79,19 +75,15 @@ class ReportPageView(TemplateView):
                     list[c['hour']] = c['clicks'] / list[c['hour']]
                 else:
                     list[c['hour']] = 0
-            clicks_per_views_list[ad] = sorted(list.items(),reverse=True, key=lambda t: t[1])
+            clicks_per_views_list[ad] = sorted(list.items(), reverse=True, key=lambda t: t[1])
         return clicks_per_views_list
 
     def get_clicks_views_sum_list(self):
         clicks_views_sum_list = {}
         for ad in Ad.objects.all():
             list = {}
-            clicks_per_hour = Click.objects.annotate(
-                hour=TruncHour('time', output_field=DateTimeField()), ).values('hour').filter(ad=ad).annotate(
-                clicks=Count('id'))
-            views_per_hour = View.objects.annotate(
-                hour=TruncHour('time', output_field=DateTimeField()), ).values('hour').filter(ad=ad).annotate(
-                views=Count('id'))
+            clicks_per_hour = self.get_clicks_per_hour(ad)
+            views_per_hour = self.views_per_hour(ad)
             for c in clicks_per_hour:
                 list[c['hour']] = c['clicks']
             for v in views_per_hour:
@@ -101,3 +93,15 @@ class ReportPageView(TemplateView):
                     list[v['hour']] = v['views']
             clicks_views_sum_list[ad] = sorted(list.items(), key=lambda t: t[0])
         return clicks_views_sum_list
+
+    def views_per_hour(self, ad):
+        views_per_hour = View.objects.annotate(
+            hour=TruncHour('time', output_field=DateTimeField()), ).values('hour').filter(ad=ad).annotate(
+            views=Count('id'))
+        return views_per_hour
+
+    def get_clicks_per_hour(self, ad):
+        clicks_per_hour = Click.objects.annotate(
+            hour=TruncHour('time', output_field=DateTimeField()), ).values('hour').filter(ad=ad).annotate(
+            clicks=Count('id'))
+        return clicks_per_hour
