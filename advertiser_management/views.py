@@ -52,10 +52,10 @@ class ReportPageView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        big_list = self.clicks_views_sum_per_hour_each_ad()
+        clicks_views_sum_list = self.clicks_views_sum_per_hour_each_ad()
 
         context = {
-            'big_list': big_list,
+            'clicks_views_sum_list': clicks_views_sum_list,
             'ads_list': Ad.objects.all()
         }
         return context
