@@ -1,3 +1,5 @@
+from collections import OrderedDict
+
 from django.db.models.functions import Trunc, TruncHour, ExtractHour
 from django.shortcuts import render, redirect
 from django.views.generic import CreateView
@@ -48,11 +50,11 @@ class CreateAdPage(CreateView):
 class ReportPageView(TemplateView):
     template_name = "advertiser_management/report.html"
 
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        list = {}
+        big_list = {}
         for ad in Ad.objects.all():
+            list = {}
             clicks_per_hour = Click.objects.annotate(
                 time_stamp=TruncHour('time', output_field=DateTimeField()), ).annotate(
                 hour=ExtractHour('time_stamp')).values('hour').filter(ad=ad).annotate(clicks=Count('id'))
@@ -60,16 +62,16 @@ class ReportPageView(TemplateView):
                 time_stamp=TruncHour('time', output_field=DateTimeField()), ).annotate(
                 hour=ExtractHour('time_stamp')).values('hour').filter(ad=ad).annotate(views=Count('id'))
             for c in clicks_per_hour:
-                for v in views_per_hour:
-                    if c['hour'] == v['hour']:
-                        list[c['hour']] = c['clicks'] + v['views']
-                    elif not list.keys().__contains__(c['hour']):
-                        list[c['hour']] = c['clicks']
-                    elif not list.keys().__contains__(v['hour']):
-                        list[v['hour']] = v['views']
-            print('hey:', list)
+                list[c['hour']] = c['clicks']
+            for v in views_per_hour:
+                if list.keys().__contains__(v['hour']):
+                    list[v['hour']] += v['views']
+                else:
+                    list[v['hour']] = v['views']
+            big_list[ad]=sorted(list.items(), key=lambda t: t[0])
+
         context = {
-            'list': list,
+            'big_list': big_list,
             'ads_list': Ad.objects.all()
         }
         return context
