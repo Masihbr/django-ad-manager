@@ -14,14 +14,21 @@
 </div>
 {% endfor %}
 <div class="card mt-3 p-3">
-    <h5 class="card-title">sum of clicks and views in form date:number</h5>
+    <h5 class="card-title">sum of clicks and views in form date:number for each Ad</h5>
     <ul>
         {% for k, v in clicks_views_sum_list.items %}
         <li>{{ k }}: {{ v }}</li>
         {% endfor %}
     </ul>
 </div>
-
+<div class="card mt-3 p-3">
+    <h5 class="card-title">clicks per views ratio in form date:ratio for each Ad</h5>
+    <ul>
+        {% for k, v in clicks_per_views_list.items %}
+        <li>{{ k }}: {{ v }}</li>
+        {% endfor %}
+    </ul>
+</div>
 </body>
 </html>
 {% endblock content %}
