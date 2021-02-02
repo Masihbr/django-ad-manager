@@ -1,6 +1,7 @@
+from django.db.models.functions import Trunc, TruncHour, ExtractHour
 from django.shortcuts import render, redirect
 from django.views.generic import CreateView
-
+from django.db.models import Count, DateTimeField
 from .forms import create_ad_form
 from .models import Advertiser, Ad, Click, View
 from django.shortcuts import get_object_or_404
@@ -27,6 +28,9 @@ class Clicker(RedirectView):
 
 class AdPageView(TemplateView):
     template_name = 'advertiser_management/ad.html'
+    click_per_hour = Ad.objects.annotate(
+        clicked=Trunc('click__time', 'hour', output_field=DateTimeField())
+    ).values('clicked').annotate(clicks=Count('click'))
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -47,15 +51,25 @@ class ReportPageView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        hour_list = {}
+        list = {}
         for ad in Ad.objects.all():
-            for i in range(0, 24):
-                sum = len(Click.objects.filter(ad=ad).filter(time__hour=i))
-                sum += len(View.objects.filter(ad=ad).filter(time__hour=i))
-                print(sum)
-                hour_list[i] = {ad,sum}
+            clicks_per_hour = Click.objects.annotate(
+                time_stamp=TruncHour('time', output_field=DateTimeField()), ).annotate(
+                hour=ExtractHour('time_stamp')).values('hour').filter(ad=ad).annotate(clicks=Count('id'))
+            views_per_hour = View.objects.annotate(
+                time_stamp=TruncHour('time', output_field=DateTimeField()), ).annotate(
+                hour=ExtractHour('time_stamp')).values('hour').filter(ad=ad).annotate(views=Count('id'))
+            for c in clicks_per_hour:
+                for v in views_per_hour:
+                    if c['hour'] == v['hour']:
+                        list[c['hour']] = c['clicks'] + v['views']
+                    elif not list.keys().__contains__(c['hour']):
+                        list[c['hour']] = c['clicks']
+                    elif not list.keys().__contains__(v['hour']):
+                        list[v['hour']] = v['views']
+            print('hey:', list)
         context = {
-            'hour_list': hour_list,
+            'list': list,
             'ads_list': Ad.objects.all()
         }
         return context
