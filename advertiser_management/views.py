@@ -54,8 +54,9 @@ class ReportPageView(TemplateView):
         context = super().get_context_data(**kwargs)
         clicks_views_sum_list = self.get_clicks_views_sum_list()
         clicks_per_views_list = self.get_clicks_per_view_list()
-
+        avg_click_view_diff_list = self.get_avg_click_view_diff_list()
         context = {
+            'avg_click_view_diff_list': avg_click_view_diff_list,
             'clicks_per_views_list': clicks_per_views_list,
             'clicks_views_sum_list': clicks_views_sum_list,
             'ads_list': Ad.objects.all()
@@ -67,7 +68,7 @@ class ReportPageView(TemplateView):
         for ad in Ad.objects.all():
             list = {}
             clicks_per_hour = self.get_clicks_per_hour(ad)
-            views_per_hour = self.views_per_hour(ad)
+            views_per_hour = self.get_views_per_hour(ad)
             for v in views_per_hour:
                 list[v['hour']] = v['views']
             for c in clicks_per_hour:
@@ -83,7 +84,7 @@ class ReportPageView(TemplateView):
         for ad in Ad.objects.all():
             list = {}
             clicks_per_hour = self.get_clicks_per_hour(ad)
-            views_per_hour = self.views_per_hour(ad)
+            views_per_hour = self.get_views_per_hour(ad)
             for c in clicks_per_hour:
                 list[c['hour']] = c['clicks']
             for v in views_per_hour:
@@ -94,7 +95,25 @@ class ReportPageView(TemplateView):
             clicks_views_sum_list[ad] = sorted(list.items(), key=lambda t: t[0])
         return clicks_views_sum_list
 
-    def views_per_hour(self, ad):
+    def get_avg_click_view_diff_list(self):
+        avg_click_view_diff_list = {}
+        for ad in Ad.objects.all():
+            views = View.objects.filter(ad=ad).order_by('time')
+            clicks = Click.objects.filter(ad=ad).order_by('time')
+            for click in clicks:
+                closeView = None
+                sum = 0
+                for view in views:
+                    if (closeView is None) or (view.ip == click.ip and view.time <= click.time and view.time > closeView.time):
+                        closeView = view
+                sum += (click.time - closeView.time).seconds
+
+            if len(clicks) != 0:
+                avg = sum / len(clicks)
+            avg_click_view_diff_list[ad] = avg
+        return avg_click_view_diff_list
+
+    def get_views_per_hour(self, ad):
         views_per_hour = View.objects.annotate(
             hour=TruncHour('time', output_field=DateTimeField()), ).values('hour').filter(ad=ad).annotate(
             views=Count('id'))
