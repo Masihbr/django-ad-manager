@@ -106,7 +106,7 @@ class ReportPageView(TemplateView):
                     if (closeView is None) or (view.ip == click.ip and view.time <= click.time and view.time > closeView.time):
                         closeView = view
                 sum += (click.time - closeView.time).seconds
-
+            avg = 0
             if len(clicks) != 0:
                 avg = sum / len(clicks)
             avg_click_view_diff_list[ad] = avg
