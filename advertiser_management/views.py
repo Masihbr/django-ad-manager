@@ -103,7 +103,7 @@ class ReportPageView(TemplateView):
                 closeView = None
                 sum = 0
                 for view in views:
-                    if (closeView is None) or (view.ip == click.ip and view.time <= click.time and view.time > closeView.time):
+                    if (closeView is None) or (view.ip == click.ip and click.time >= view.time > closeView.time):
                         closeView = view
                 sum += (click.time - closeView.time).seconds
             avg = 0
