@@ -69,13 +69,13 @@ class ReportPageView(TemplateView):
             list = {}
             clicks_per_hour = self.get_clicks_per_hour(ad)
             views_per_hour = self.get_views_per_hour(ad)
-            for v in views_per_hour:
-                list[v['hour']] = v['views']
-            for c in clicks_per_hour:
-                if list.keys().__contains__(c['hour']):
-                    list[c['hour']] = c['clicks'] / list[c['hour']]
+            for view in views_per_hour:
+                list[view['hour']] = view['views']
+            for click in clicks_per_hour:
+                if list.keys().__contains__(click['hour']):
+                    list[click['hour']] = click['clicks'] / list[click['hour']]
                 else:
-                    list[c['hour']] = 0
+                    list[click['hour']] = 0
             clicks_per_views_list[ad] = sorted(list.items(), reverse=True, key=lambda t: t[1])
         return clicks_per_views_list
 
@@ -85,13 +85,13 @@ class ReportPageView(TemplateView):
             list = {}
             clicks_per_hour = self.get_clicks_per_hour(ad)
             views_per_hour = self.get_views_per_hour(ad)
-            for c in clicks_per_hour:
-                list[c['hour']] = c['clicks']
-            for v in views_per_hour:
-                if list.keys().__contains__(v['hour']):
-                    list[v['hour']] += v['views']
+            for click in clicks_per_hour:
+                list[click['hour']] = click['clicks']
+            for view in views_per_hour:
+                if list.keys().__contains__(view['hour']):
+                    list[view['hour']] += view['views']
                 else:
-                    list[v['hour']] = v['views']
+                    list[view['hour']] = view['views']
             clicks_views_sum_list[ad] = sorted(list.items(), key=lambda t: t[0])
         return clicks_views_sum_list
 
