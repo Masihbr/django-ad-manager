@@ -6,22 +6,14 @@ from django.urls import reverse
 # Create your models here.
 
 
-class BaseAdvertising(models.Model):
-    clicks = models.IntegerField(default=0)
-    views = models.IntegerField(default=0)
-
-    class Meta:
-        abstract = True
-
-
-class Advertiser(BaseAdvertising):
+class Advertiser(models.Model):
     name = models.CharField(max_length=150)
 
     def __str__(self):
         return self.name
 
 
-class Ad(BaseAdvertising):
+class Ad(models.Model):
     title = models.CharField(max_length=100)
     image = models.ImageField(default='default.jpg', upload_to='profile_pics')
     advertiser = models.ForeignKey(Advertiser, on_delete=models.CASCADE)
@@ -31,7 +23,8 @@ class Ad(BaseAdvertising):
     def __str__(self):
         return ("ad_%d" % self.pk)
 
-    def get_absolute_url(self):
+    @staticmethod
+    def get_absolute_url():
         return reverse('ads')
 
 
