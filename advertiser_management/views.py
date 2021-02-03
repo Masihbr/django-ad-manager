@@ -24,7 +24,6 @@ class Clicker(RedirectView):
 
     def get_redirect_url(self, *args, **kwargs):
         ad = get_object_or_404(Ad, pk=kwargs['pk'])
-        ad.inc_clicks()
         return super().get_redirect_url(*args, **kwargs)
 
 

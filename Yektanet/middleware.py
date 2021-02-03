@@ -26,7 +26,6 @@ class IPMiddleware:
         if url_name == 'ads':
             for advertiser in Advertiser.objects.all():
                 for ad in advertiser.ad_set.all():
-                    ad.inc_views()
                     view = View(ad=ad, ip=self.get_client_ip(request))
                     view.save()
         if url_name == 'clicker':
