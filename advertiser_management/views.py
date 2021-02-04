@@ -17,7 +17,7 @@ from django.views.generic.base import RedirectView, TemplateView
 from .serializers import AdSerializer, AdvertiserSerializer, ClickSerializer, ViewSerializer
 
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 
 
 class AdViewset(viewsets.ModelViewSet):
@@ -33,13 +33,13 @@ class AdvertiserViewset(viewsets.ModelViewSet):
     queryset = Advertiser.objects.all()
 
 class ClickViewset(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated & IsAdminUser]
 
     serializer_class = ClickSerializer
     queryset = Click.objects.all()
 
 class ViewViewset(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated & IsAdminUser]
 
     serializer_class = ViewSerializer
     queryset = View.objects.all()
