@@ -30,6 +30,23 @@ def ad_list(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+@api_view(['GET', 'PUT', 'Delete'])
+def ad(request, pk):
+    ad = get_object_or_404(Ad, pk=pk)
+    if request.method == 'GET':
+        serializer = AdSerializer(ad)
+        return Response(serializer.data)
+    elif request.method == 'PUT':
+        serializer = AdSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == 'DELETE':
+        ad.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
 class HomePageView(TemplateView):
     template_name = 'advertiser_management/ads.html'
 

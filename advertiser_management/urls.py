@@ -8,5 +8,6 @@ urlpatterns = [
     path('ad/<int:pk>/', AdPageView.as_view(), name='ad'),
     path('create_ad/', CreateAdPage.as_view(), name='create_ad'),
     path('report/', ReportPageView.as_view(), name='report'),
-    path('ad_list/', views.ad_list, name='ad_list')
+    path('ad_list/', views.ad_list, name='ad_list'),
+    path('ad_each/<int:pk>/', views.ad, name='ad_each'),
 ]
