@@ -14,110 +14,35 @@ from .models import Advertiser, Ad, Click, View
 from django.shortcuts import get_object_or_404
 from django.views.generic.base import RedirectView, TemplateView
 
-from .serializers import AdSerializer
+from .serializers import AdSerializer, AdvertiserSerializer, ClickSerializer, ViewSerializer
 
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
 
 
-class AdViewSet(viewsets.ModelViewSet):
-    serializer_class = AdSerializer
-    queryset = Ad.objects.all()
-
-
-class GenericAdListAPIView(generics.GenericAPIView, mixins.ListModelMixin, mixins.CreateModelMixin,
-                           mixins.UpdateModelMixin, mixins.DestroyModelMixin, mixins.RetrieveModelMixin):
-    serializer_class = AdSerializer
-    queryset = Ad.objects.all()
-
-    lookup_field = 'id'
-
-    authentication_classes = [SessionAuthentication, BasicAuthentication]
+class AdViewset(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
-    def get(self, request, id=None):
-        if id:
-            return self.retrieve(request)
-        else:
-            return self.list(request)
+    serializer_class = AdSerializer
+    queryset = Ad.objects.all()
 
-    def post(self, request, id=None):
-        return self.create(request)
+class AdvertiserViewset(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
 
-    def put(self, request, id=None):
-        return self.update(request, id)
+    serializer_class = AdvertiserSerializer
+    queryset = Advertiser.objects.all()
 
-    def delete(self, request, id=None):
-        return self.destroy(request, id)
+class ClickViewset(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
 
+    serializer_class = ClickSerializer
+    queryset = Click.objects.all()
 
-class AdListAPIView(APIView):
-    def get(self, request):
-        ads = Ad.objects.all()
-        serializer = AdSerializer(ads, many=True)
-        return Response(serializer.data)
+class ViewViewset(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
 
-    def post(self, request):
-        serializer = AdSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class AdEachAPIView(APIView):
-
-    def get_ad(self, pk):
-        return get_object_or_404(Ad, pk=pk)
-
-    def get(self, request, pk):
-        ad = self.get_ad(pk)
-        serializer = AdSerializer(ad)
-        return Response(serializer.data)
-
-    def put(self, request, pk):
-        ad = self.get_ad(pk)
-        serializer = AdSerializer(ad, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def delete(self, request, pk):
-        ad = self.get_ad(pk)
-        ad.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-@api_view(['GET', 'POST'])
-def ad_list(request):
-    if request.method == 'GET':
-        ads = Ad.objects.all()
-        serializer = AdSerializer(ads, many=True)
-        return Response(serializer.data)
-    elif request.method == 'POST':
-        serializer = AdSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-@api_view(['GET', 'PUT', 'Delete'])
-def ad(request, pk):
-    ad = get_object_or_404(Ad, pk=pk)
-    if request.method == 'GET':
-        serializer = AdSerializer(ad)
-        return Response(serializer.data)
-    elif request.method == 'PUT':
-        serializer = AdSerializer(ad, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    elif request.method == 'DELETE':
-        ad.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+    serializer_class = ViewSerializer
+    queryset = View.objects.all()
 
 
 class HomePageView(TemplateView):
