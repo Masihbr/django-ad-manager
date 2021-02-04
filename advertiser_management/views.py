@@ -4,6 +4,7 @@ from django.db.models.functions import Trunc, TruncHour, ExtractHour
 from django.shortcuts import render, redirect
 from django.views.generic import CreateView
 from django.db.models import Count, DateTimeField
+from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
@@ -15,12 +16,18 @@ from django.views.generic.base import RedirectView, TemplateView
 from .serializers import AdSerializer
 
 
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 def ad_list(request):
     if request.method == 'GET':
         ads = Ad.objects.all()
         serializer = AdSerializer(ads, many=True)
         return Response(serializer.data)
+    elif request.method == 'POST':
+        serializer = AdSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class HomePageView(TemplateView):

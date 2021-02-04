@@ -31,7 +31,7 @@ class Migration(migrations.Migration):
                 ('clicks', models.IntegerField(default=0)),
                 ('views', models.IntegerField(default=0)),
                 ('title', models.CharField(max_length=100)),
-                ('image', models.ImageField(default='default.jpg', upload_to='profile_pics')),
+                ('image', models.ImageField(default='default.jpg', upload_to='images')),
                 ('advertiser', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='advertiser_management.advertiser')),
             ],
             options={
