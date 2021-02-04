@@ -1,11 +1,11 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import (Clicker, CreateAdPage, HomePageView, AdPageView, ReportPageView, AdListAPIView, AdEachAPIView,
-                    AdListViewSet, GenericAdListAPIView
+                    AdViewSet, GenericAdListAPIView
                     )
 
 router = DefaultRouter()
-router.register(r'users', AdListViewSet, basename='user')
+router.register(r'list', AdViewSet, basename='user')
 
 urlpatterns = [
     path('', HomePageView.as_view(), name='ads'),
@@ -15,8 +15,9 @@ urlpatterns = [
     path('report/', ReportPageView.as_view(), name='report'),
     # path('ad_list/', views.ad_list, name='ad_list'),
     path('ad_list/', AdListAPIView.as_view(), name='ad_list'),
-    path('generic/ad_list/<int:id>', GenericAdListAPIView.as_view(), name='generic_ad_each'),
+    path('generic/ad_list/<int:id>/', GenericAdListAPIView.as_view(), name='generic_ad_each'),
     # path('ad_each/<int:pk>/', views.ad, name='ad_each'),
     path('ad_each/<int:pk>/', AdEachAPIView.as_view(), name='ad_each'),
     path('viewset/',include(router.urls)),
+    path('viewset/<int:pk>/',include(router.urls)),
 ]

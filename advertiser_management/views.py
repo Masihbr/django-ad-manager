@@ -20,7 +20,7 @@ from rest_framework.authentication import SessionAuthentication, BasicAuthentica
 from rest_framework.permissions import IsAuthenticated
 
 
-class AdListViewSet(viewsets.ViewSet):
+class AdViewSet(viewsets.ViewSet):
     def list(self, request):
         ads = Ad.objects.all()
         serializer = AdSerializer(ads, many=True)
@@ -38,9 +38,14 @@ class AdListViewSet(viewsets.ViewSet):
         serializer = AdSerializer(ad)
         return Response(serializer.data)
 
-    # def update(self, request, pk=None):
-    #     pass
-    #
+    def update(self, request, pk=None):
+        ad = get_object_or_404(Ad, pk=pk )
+        serializer = AdSerializer(ad, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
     # def partial_update(self, request, pk=None):
     #     pass
 
