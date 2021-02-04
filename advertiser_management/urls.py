@@ -1,6 +1,7 @@
 from django.urls import path
 from . import views
-from .views import Clicker, CreateAdPage, HomePageView, AdPageView, ReportPageView, AdListAPIView, AdEachAPIView, GenericAdListAPIView
+from .views import Clicker, CreateAdPage, HomePageView, AdPageView, ReportPageView, AdListAPIView, AdEachAPIView, \
+    GenericAdListAPIView
 
 urlpatterns = [
     path('', HomePageView.as_view(), name='ads'),
@@ -9,8 +10,8 @@ urlpatterns = [
     path('create_ad/', CreateAdPage.as_view(), name='create_ad'),
     path('report/', ReportPageView.as_view(), name='report'),
     # path('ad_list/', views.ad_list, name='ad_list'),
-    path('ad_list/',AdListAPIView.as_view() , name='ad_list'),
-    path('generic/ad_list/',GenericAdListAPIView.as_view() , name='generic_ad_list'),
+    path('ad_list/', AdListAPIView.as_view(), name='ad_list'),
+    path('generic/ad_list/<int:id>', GenericAdListAPIView.as_view(), name='generic_ad_each'),
     # path('ad_each/<int:pk>/', views.ad, name='ad_each'),
     path('ad_each/<int:pk>/', AdEachAPIView.as_view(), name='ad_each'),
 ]

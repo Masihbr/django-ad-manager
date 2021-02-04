@@ -16,12 +16,28 @@ from django.views.generic.base import RedirectView, TemplateView
 
 from .serializers import AdSerializer
 
-class GenericAdListAPIView(generics.GenericAPIView, mixins.ListModelMixin):
+
+class GenericAdListAPIView(generics.GenericAPIView, mixins.ListModelMixin, mixins.CreateModelMixin,
+                           mixins.UpdateModelMixin, mixins.DestroyModelMixin, mixins.RetrieveModelMixin):
     serializer_class = AdSerializer
     queryset = Ad.objects.all()
 
-    def get(self,request):
-        return self.list(request)
+    lookup_field = 'id'
+
+    def get(self, request, id=None):
+        if id:
+            return self.retrieve(request)
+        else:
+            return self.list(request)
+
+    def post(self, request, id=None):
+        return self.create(request)
+
+    def put(self, request, id=None):
+        return self.update(request,id)
+
+    def delete(self, request, id=None):
+        return self.destroy(request,id)
 
 class AdListAPIView(APIView):
     def get(self, request):
@@ -59,6 +75,7 @@ class AdEachAPIView(APIView):
         ad = self.get_ad(pk)
         ad.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 @api_view(['GET', 'POST'])
 def ad_list(request):
