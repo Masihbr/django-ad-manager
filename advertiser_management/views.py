@@ -34,10 +34,11 @@ class GenericAdListAPIView(generics.GenericAPIView, mixins.ListModelMixin, mixin
         return self.create(request)
 
     def put(self, request, id=None):
-        return self.update(request,id)
+        return self.update(request, id)
 
     def delete(self, request, id=None):
-        return self.destroy(request,id)
+        return self.destroy(request, id)
+
 
 class AdListAPIView(APIView):
     def get(self, request):
