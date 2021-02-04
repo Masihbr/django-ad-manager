@@ -1,7 +1,11 @@
-from django.urls import path
-from . import views
-from .views import Clicker, CreateAdPage, HomePageView, AdPageView, ReportPageView, AdListAPIView, AdEachAPIView, \
-    GenericAdListAPIView
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import (Clicker, CreateAdPage, HomePageView, AdPageView, ReportPageView, AdListAPIView, AdEachAPIView,
+                    AdListViewSet, GenericAdListAPIView
+                    )
+
+router = DefaultRouter()
+router.register(r'users', AdListViewSet, basename='user')
 
 urlpatterns = [
     path('', HomePageView.as_view(), name='ads'),
@@ -14,4 +18,5 @@ urlpatterns = [
     path('generic/ad_list/<int:id>', GenericAdListAPIView.as_view(), name='generic_ad_each'),
     # path('ad_each/<int:pk>/', views.ad, name='ad_each'),
     path('ad_each/<int:pk>/', AdEachAPIView.as_view(), name='ad_each'),
+    path('viewset/',include(router.urls)),
 ]
