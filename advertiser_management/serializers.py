@@ -8,11 +8,17 @@ class AdSerializer(serializers.Serializer):
         model = Ad
         fields = '__all__'
 
+    def create(self, validated_data):
+        return Ad.objects.create(**validated_data)
+
 
 class AdvertiserSerializer(serializers.Serializer):
     class Meta:
         model = Advertiser
         fields = '__all__'
+
+    def create(self, validated_data):
+        return Advertiser.objects.create(**validated_data)
 
 
 class ClickSerializer(serializers.Serializer):
