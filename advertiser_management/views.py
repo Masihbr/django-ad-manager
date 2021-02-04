@@ -16,6 +16,9 @@ from django.views.generic.base import RedirectView, TemplateView
 
 from .serializers import AdSerializer
 
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.permissions import IsAuthenticated
+
 
 class GenericAdListAPIView(generics.GenericAPIView, mixins.ListModelMixin, mixins.CreateModelMixin,
                            mixins.UpdateModelMixin, mixins.DestroyModelMixin, mixins.RetrieveModelMixin):
@@ -23,6 +26,9 @@ class GenericAdListAPIView(generics.GenericAPIView, mixins.ListModelMixin, mixin
     queryset = Ad.objects.all()
 
     lookup_field = 'id'
+
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, id=None):
         if id:
