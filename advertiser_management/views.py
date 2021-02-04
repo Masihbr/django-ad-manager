@@ -4,7 +4,7 @@ from django.db.models.functions import Trunc, TruncHour, ExtractHour
 from django.shortcuts import render, redirect
 from django.views.generic import CreateView
 from django.db.models import Count, DateTimeField
-from rest_framework import status
+from rest_framework import status, generics, mixins
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -16,6 +16,12 @@ from django.views.generic.base import RedirectView, TemplateView
 
 from .serializers import AdSerializer
 
+class GenericAdListAPIView(generics.GenericAPIView, mixins.ListModelMixin):
+    serializer_class = AdSerializer
+    queryset = Ad.objects.all()
+
+    def get(self,request):
+        return self.list(request)
 
 class AdListAPIView(APIView):
     def get(self, request):
