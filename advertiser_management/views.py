@@ -20,39 +20,9 @@ from rest_framework.authentication import SessionAuthentication, BasicAuthentica
 from rest_framework.permissions import IsAuthenticated
 
 
-class AdViewSet(viewsets.ViewSet):
-    def list(self, request):
-        ads = Ad.objects.all()
-        serializer = AdSerializer(ads, many=True)
-        return Response(serializer.data)
-
-    def create(self, request):
-        serializer = AdSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def retrieve(self, request, pk=None):
-        ad = get_object_or_404(Ad, pk=pk)
-        serializer = AdSerializer(ad)
-        return Response(serializer.data)
-
-    def update(self, request, pk=None):
-        ad = get_object_or_404(Ad, pk=pk )
-        serializer = AdSerializer(ad, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    # def partial_update(self, request, pk=None):
-    #     pass
-
-    def destroy(self, request, pk=None):
-        ad = get_object_or_404(Ad, pk=pk)
-        ad.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+class AdViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
+    serializer_class = AdSerializer
+    queryset = Ad.objects.all()
 
 
 class GenericAdListAPIView(generics.GenericAPIView, mixins.ListModelMixin, mixins.CreateModelMixin,
