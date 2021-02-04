@@ -20,7 +20,8 @@ from rest_framework.authentication import SessionAuthentication, BasicAuthentica
 from rest_framework.permissions import IsAuthenticated
 
 
-class AdViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
+class AdViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin,
+                mixins.RetrieveModelMixin, mixins.DestroyModelMixin):
     serializer_class = AdSerializer
     queryset = Ad.objects.all()
 
