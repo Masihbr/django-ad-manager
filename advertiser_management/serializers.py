@@ -27,7 +27,7 @@ class ClickSerializer(serializers.Serializer):
         fields = '__all__'
 
 
-class AdSerializer(serializers.Serializer):
+class ViewSerializer(serializers.Serializer):
     class Meta:
         model = View
         fields = '__all__'
