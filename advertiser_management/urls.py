@@ -7,5 +7,6 @@ urlpatterns = [
     path('click/<int:pk>/', Clicker.as_view(), name='clicker'),
     path('ad/<int:pk>/', AdPageView.as_view(), name='ad'),
     path('create_ad/', CreateAdPage.as_view(), name='create_ad'),
-    path('report/', ReportPageView.as_view(), name='report')
+    path('report/', ReportPageView.as_view(), name='report'),
+    path('ad_list/', views.ad_list, name='ad_list')
 ]

@@ -4,10 +4,23 @@ from django.db.models.functions import Trunc, TruncHour, ExtractHour
 from django.shortcuts import render, redirect
 from django.views.generic import CreateView
 from django.db.models import Count, DateTimeField
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+
 from .forms import create_ad_form
 from .models import Advertiser, Ad, Click, View
 from django.shortcuts import get_object_or_404
 from django.views.generic.base import RedirectView, TemplateView
+
+from .serializers import AdSerializer
+
+
+@api_view(['GET'])
+def ad_list(request):
+    if request.method == 'GET':
+        ads = Ad.objects.all()
+        serializer = AdSerializer(ads, many=True)
+        return Response(serializer.data)
 
 
 class HomePageView(TemplateView):
