@@ -37,7 +37,7 @@ def ad(request, pk):
         serializer = AdSerializer(ad)
         return Response(serializer.data)
     elif request.method == 'PUT':
-        serializer = AdSerializer(data=request.data)
+        serializer = AdSerializer(ad, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
