@@ -7,6 +7,7 @@ from django.db.models import Count, DateTimeField
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from .forms import create_ad_form
 from .models import Advertiser, Ad, Click, View
@@ -14,6 +15,19 @@ from django.shortcuts import get_object_or_404
 from django.views.generic.base import RedirectView, TemplateView
 
 from .serializers import AdSerializer
+
+class AdListAPIView(APIView):
+    def get(self,request):
+        ads = Ad.objects.all()
+        serializer = AdSerializer(ads, many=True)
+        return Response(serializer.data)
+
+    def post(self,request):
+        serializer = AdSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET', 'POST'])
