@@ -6,3 +6,6 @@ import time
 def sum(a, b):
     time.sleep(10)
     return a + b
+@shared_task
+def send_email(email):
+    print(f'A sample message is sent to {email}')
