@@ -135,15 +135,15 @@ class ReportPageView(TemplateView):
     def get_avg_click_view_diff_list(self):
         avg_click_view_diff_list = {}
         for ad in Ad.objects.all():
-            views = View.objects.filter(ad=ad).order_by('date')
-            clicks = Click.objects.filter(ad=ad).order_by('date')
+            views = View.objects.filter(ad=ad).order_by('time')
+            clicks = Click.objects.filter(ad=ad).order_by('time')
             for click in clicks:
                 closeView = None
                 sum = 0
                 for view in views:
-                    if (closeView is None) or (view.ip == click.ip and click.date >= view.date > closeView.time):
+                    if (closeView is None) or (view.ip == click.ip and click.time >= view.time > closeView.time):
                         closeView = view
-                sum += (click.date - closeView.time).seconds
+                sum += (click.time - closeView.time).seconds
             avg = 0
             if len(clicks) != 0:
                 avg = sum / len(clicks)

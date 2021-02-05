@@ -1,12 +1,14 @@
 from datetime import timezone, timedelta
 
 from celery import shared_task
-from .models import Ad, Click, View, HourStatusTable
+from django.db.models import Sum
+
+from .models import Ad, Click, View, HourStatusTable, DayStatusTable
 import time
 
 
 @shared_task
-def save_hour_ad_status():
+def save_hourly_ad_status():
     ads = Ad.objects.all()
     this_hour = timezone.now().replace(minute=0, second=0, microsecond=0)
     past_hour = this_hour - timedelta(hours=1)
@@ -17,5 +19,11 @@ def save_hour_ad_status():
         table.save()
 
 
-# @shared_task
-
+@shared_task
+def save_daily_ad_status():
+    ads = Ad.objects.all()
+    this_day = timezone.now().replace(minute=0, second=0, microsecond=0)
+    past_day = this_day - timedelta(days=1)
+    for ad in ads:
+        hour_status_table = HourStatusTable.objects.filter(ad=ad, date__range=(past_day, this_day)).annotate(
+            clicks=Sum('clicks'), views=Sum('views'))
