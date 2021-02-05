@@ -51,7 +51,7 @@ class StatusTable(models.Model):
     ad = models.ForeignKey(Ad, on_delete=models.CASCADE)
     clicks = models.IntegerField(default=0)
     views = models.IntegerField(default=0)
-    time = models.DateTimeField(default=timezone.now)
+    date = models.DateTimeField(default=timezone.now)
 
 
 class HourStatusTable(StatusTable):
