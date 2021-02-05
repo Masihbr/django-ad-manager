@@ -26,6 +26,9 @@ def save_daily_ad_status():
     this_day = timezone.now().replace(minute=0, second=0, microsecond=0)
     past_day = this_day - timedelta(days=1)
     for ad in ads:
-        hour_status_table = HourStatusTable.objects.filter(ad=ad, date__range=(past_day, this_day)).annotate(
-            clicks=Sum('clicks'), views=Sum('views'))
-
+        hour_status_table = HourStatusTable.objects.filter(ad=ad, date__range=(past_day, this_day)).aggregate(
+            clicks_sum=Sum('clicks'), views_sum=Sum('views'))
+        clicks = hour_status_table['clicks_sum']
+        views = hour_status_table['views_sum']
+        table = DayStatusTable(ad=ad, clicks=clicks, views=views, date=this_day)
+        table.save()
