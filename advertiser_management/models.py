@@ -30,7 +30,7 @@ class Ad(models.Model):
 
 class BaseData(models.Model):
     ad = models.ForeignKey(Ad, on_delete=models.CASCADE)
-    time = models.DateTimeField(default=timezone.now)
+    date = models.DateTimeField(default=timezone.now)
     ip = models.GenericIPAddressField()
 
     class Meta:
