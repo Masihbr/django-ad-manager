@@ -3,6 +3,8 @@ import os
 from celery import Celery
 
 # set the default Django settings module for the 'celery' program.
+from celery.schedules import crontab
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Yektanet.settings')
 
 app = Celery('Yektanet')
@@ -14,10 +16,15 @@ app = Celery('Yektanet')
 app.config_from_object('django.conf:settings', namespace='CELERY')
 
 app.conf.beat_schedule = {
-    'send-email-every-10-seconds': {
-        'task': 'advertiser_management.tasks.send_email',
-        'schedule': 10.0,
-        'args': ('masihbr@gmail.com',),
+    'save-status-every-hour': {
+        'task': 'advertiser_management.tasks.save_hourly_ad_status',
+        'schedule': crontab(minute=0, hour='*/1'),
+        'args': (),
+    },
+    'save-status-every-day': {
+        'task': 'advertiser_management.tasks.save_daily_ad_status',
+        'schedule': crontab(minute=0, hour=0),
+        'args': (),
     },
 }
 app.conf.timezone = 'UTC'
