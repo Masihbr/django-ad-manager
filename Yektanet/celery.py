@@ -13,6 +13,15 @@ app = Celery('Yektanet')
 #   should have a `CELERY_` prefix.
 app.config_from_object('django.conf:settings', namespace='CELERY')
 
+app.conf.beat_schedule = {
+    'send-email-every-10-seconds': {
+        'task': 'advertiser_management.tasks.send_email',
+        'schedule': 10.0,
+        'args': ('masihbr@gmail.com',),
+    },
+}
+app.conf.timezone = 'UTC'
+
 # Load task modules from all registered Django app configs.
 app.autodiscover_tasks()
 
