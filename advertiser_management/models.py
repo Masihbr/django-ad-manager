@@ -39,9 +39,26 @@ class BaseData(models.Model):
 
 class Click(BaseData):
     def __str__(self):
-        return ("click_%d:ad_%d" % (self.pk, self.ad.pk))
+        return "click_%d:ad_%d" % (self.pk, self.ad.pk)
 
 
 class View(BaseData):
     def __str__(self):
-        return ("view_%d:ad_%d" % (self.pk, self.ad.pk))
+        return "view_%d:ad_%d" % (self.pk, self.ad.pk)
+
+
+class StatusTable(models.Model):
+    ad = models.ForeignKey(Ad, on_delete=models.CASCADE)
+    clicks = models.IntegerField(default=0)
+    views = models.IntegerField(default=0)
+    time = models.DateTimeField(default=timezone.now)
+
+
+class HourStatusTable(StatusTable):
+    def __str__(self):
+        return "ad_%d:hour_%d" % (self.ad.pk, self.time.hour)
+
+
+class DayStatusTable(StatusTable):
+    def __str__(self):
+        return "ad_%d:day_%d" % (self.ad.pk, self.time.day.real)
