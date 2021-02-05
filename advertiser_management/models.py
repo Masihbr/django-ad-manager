@@ -56,9 +56,9 @@ class StatusTable(models.Model):
 
 class HourStatusTable(StatusTable):
     def __str__(self):
-        return "ad_%d:hour_%d" % (self.ad.pk, self.time.hour)
+        return "ad_%d:hour_%d" % (self.ad.pk, self.date.hour)
 
 
 class DayStatusTable(StatusTable):
     def __str__(self):
-        return "ad_%d:day_%d" % (self.ad.pk, self.time.day.real)
+        return "ad_%d:day_%d" % (self.ad.pk, self.date.day.real)
