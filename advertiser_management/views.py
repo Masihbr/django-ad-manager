@@ -161,3 +161,9 @@ class ReportPageView(TemplateView):
             hour=TruncHour('time', output_field=DateTimeField()), ).values('hour').filter(ad=ad).annotate(
             clicks=Count('id'))
         return clicks_per_hour
+
+
+class ViewReportPageAPIView(viewsets.ModelViewSet):
+    serializer_class = ViewSerializer
+    queryset = View.objects.annotate(hour=TruncHour('time', output_field=DateTimeField()), ).values('hour').annotate(
+        views=Count('id'))
